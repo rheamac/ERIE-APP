@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "434668018714",
+    "firebase_url": "https://erie-uwin.firebaseio.com",
+    "project_id": "erie-uwin",
+    "storage_bucket": "erie-uwin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:434668018714:android:01543e509c542932",
+        "android_client_info": {
+          "package_name": "ca.uwindsor.erie.erie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "434668018714-mvtdih262c3lo9rt3f2nhcbjq87v5hqq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkqVlKfxWyTtN0daoFZlTv_hHjwjpYWgM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

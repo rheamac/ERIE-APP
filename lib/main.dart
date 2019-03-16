@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import './erie-register.dart';
 
 void main() => runApp(MyApp());
 
@@ -53,7 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<FirebaseUser> _handleSignIn() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
@@ -113,9 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Text(
               'You have pushed the button this many times:',
-              style: TextStyle(
-                fontWeight: FontWeight.bold
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(
               '$_counter',
@@ -125,9 +125,13 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text('Dabao btn ko'),
               onPressed: () {
                 _handleSignIn()
-                    .then((FirebaseUser user) => print(user))
+                    .then((FirebaseUser user) => {
+                      Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyRegister(user)),
+                )})
                     .catchError((e) => print(e));
-              }, 
+              },
             )
           ],
         ),

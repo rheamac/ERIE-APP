@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './register-service.dart';
-import './questionarie.dart';
+import './question.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MyFeedbackList extends StatefulWidget {
   FeedbackList createState() {
@@ -82,7 +83,7 @@ class FeedbackList extends State {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MyQuestionarie(item)));
+                          builder: (context) => QuestionWidget(item, 0)));
                 }))
       ],
     );

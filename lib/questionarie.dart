@@ -28,18 +28,13 @@ class Questionarie extends State {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
-      appBar: AppBar(
-        title: Text('ERIE'),
-      ),
-      body:  ListView.builder(
-          itemCount: _newData['questions'].length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(_newData['questions'][index]['title']),
-           //   subtitle: Text(_newData['answer_a'][index]['title']),
-            );
-          }  
-    ))
-    );
+            body: ListView.builder(
+                itemCount: _newData['questions'].length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(_newData['questions'][index]['title']),
+                    //   subtitle: Text(_newData['answer_a'][index]['title']),
+                  );
+                })));
   }
 }

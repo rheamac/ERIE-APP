@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './register-service.dart';
+import './questionarie.dart';
 
 class MyFeedbackList extends StatefulWidget {
   FeedbackList createState() {
@@ -47,14 +48,22 @@ class FeedbackList extends State {
                         title: Text(item['name']),
                         children: <Widget>[
                           Container(
-                            padding: EdgeInsets.all(8.0),
-                            alignment: Alignment.centerRight,
-                              child: Text(item['questions'].length.toString() + ' questions')),
+                              padding: EdgeInsets.all(8.0),
+                              alignment: Alignment.centerRight,
+                              child: Text(item['questions'].length.toString() +
+                                  ' questions')),
                           Container(
-                            padding: EdgeInsets.all(8.0),
-                            alignment: Alignment.centerRight,
+                              padding: EdgeInsets.all(8.0),
+                              alignment: Alignment.centerRight,
                               child: RaisedButton(
-                                  child: Text('New Feedback'), onPressed: () {}))
+                                  child: Text('New Feedback'),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                MyQuestionarie(item)));
+                                  }))
                         ],
                       );
                     })));

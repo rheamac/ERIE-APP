@@ -110,11 +110,10 @@ class Register extends State {
                       _data.id = id;
                       this.mappedData = _data.toMap();
                       _registerService.postData(this.mappedData);
-                      print(_data);
-                       Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyFeedbackList()));
-                
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyFeedbackList()));
                     })
               ],
             )),

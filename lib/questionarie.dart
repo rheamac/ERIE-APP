@@ -6,8 +6,8 @@ import './feed.dart';
 
 class MyQuestionarie extends StatefulWidget {
   Map<String, dynamic> _newData;
-  MyQuestionarie(data){
-_newData = data;
+  MyQuestionarie(data) {
+    _newData = data;
   }
   Questionarie createState() {
     return Questionarie(_newData);
@@ -15,13 +15,14 @@ _newData = data;
 }
 
 class Questionarie extends State {
+  Map<String, dynamic> _newData;
   @override
   void initState() {
     super.initState();
   }
 
   Questionarie(data) {
-    print(data);
+    _newData = data;
   }
   @override
   Widget build(BuildContext context) {
@@ -30,15 +31,15 @@ class Questionarie extends State {
       appBar: AppBar(
         title: Text('ERIE'),
       ),
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: Form(
-            child: ListView(
-          children: <Widget>[
-            Text('New Feeds'),
-          ],
-        )),
-      ),
-    ));
+      body:  ListView.builder(
+          itemCount: _newData['questions'].length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(_newData['questions'][index]['title']),
+           //   subtitle: Text(_newData['answer_a'][index]['title']),
+            );
+          }  
+    ))
+    );
   }
 }

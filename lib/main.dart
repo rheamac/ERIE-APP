@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import './erie-register.dart';
 
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'pagal'),
+      home: MyHomePage(title: 'ERIE'),
     );
   }
 }
@@ -114,15 +115,18 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:',
+              'Welcome to ERIE',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(
-              '$_counter',
+              '    ',
               style: Theme.of(context).textTheme.display1,
             ),
             RaisedButton(
-              child: Text('Dabao btn ko'),
+              
+            //  child: new Image.asset('assets\signin1.jpeg'),
+              child: Text('Sign in with Google'),
+              color: Colors.lightBlueAccent,
               onPressed: () {
                 _handleSignIn()
                     .then((FirebaseUser user) => {

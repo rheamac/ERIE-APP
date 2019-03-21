@@ -9,7 +9,6 @@ class MyRegister extends StatefulWidget {
   MyRegister(this.userDetails);
 
   Register createState() {
-    //print(this.userDetails);
     return Register(this.userDetails);
   }
 }
@@ -23,12 +22,10 @@ class Register extends State {
   String lname;
   String id;
   Map mappedData;
-  TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = new TextEditingController(text: 'Initial value');
   }
 
   Register(userDetails) {
@@ -43,7 +40,7 @@ class Register extends State {
     return MaterialApp(
         home: Scaffold(
       appBar: AppBar(
-        title: Text('ERIE'),
+        title: Text('ERIE - Register'),
       ),
       body: Container(
         padding: EdgeInsets.all(20),

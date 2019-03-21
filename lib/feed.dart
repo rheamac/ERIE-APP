@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import './register-service.dart';
 import './questionarie.dart';
 
 class MyFeedbackList extends StatefulWidget {
   FeedbackList createState() {
-    //print(this.userDetails);
     return FeedbackList();
   }
 }
@@ -19,10 +17,10 @@ class FeedbackList extends State {
   }
 
   FeedbackList() {
-    FeedbackListData();
+    feedbackListData();
   }
 
-  FeedbackListData() async {
+  feedbackListData() async {
     RegisterService _registerService = new RegisterService();
     List<dynamic> res = await _registerService.getData();
     print(_data);
@@ -36,36 +34,57 @@ class FeedbackList extends State {
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
-              title: Text('ERIE'),
+              title: Text('ERIE - Available Feedbacks'),
             ),
-            body: _data == null
-                ? Text('Loading...')
-                : ListView.builder(
-                    itemCount: _data.length,
-                    itemBuilder: (context, index) {
-                      Map<String, dynamic> item = _data[index];
-                      return ExpansionTile(
-                        title: Text(item['name']),
-                        children: <Widget>[
-                          Container(
-                              padding: EdgeInsets.all(8.0),
-                              alignment: Alignment.centerRight,
-                              child: Text(item['questions'].length.toString() +
-                                  ' questions')),
-                          Container(
-                              padding: EdgeInsets.all(8.0),
-                              alignment: Alignment.centerRight,
-                              child: RaisedButton(
-                                  child: Text('New Feedback'),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                MyQuestionarie(item)));
-                                  }))
-                        ],
-                      );
-                    })));
+            body: list()));
+  }
+
+  Widget list() {
+    if (_data == null) {
+      return Container(
+        alignment: Alignment.center,
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      return ListView.builder(
+          itemCount: _data.length,
+          itemBuilder: (context, index) {
+            return this.item(_data[index]);
+          });
+    }
+  }
+
+  Widget item(Map<String, dynamic> item) {
+    int questions = item['questions'].length;
+
+    return ExpansionTile(
+      title: Text(
+        item['name'],
+        textScaleFactor: 1.2,
+      ),
+      children: <Widget>[
+        Container(
+            padding: EdgeInsets.all(16.0), child: Text(item['description'])),
+        Container(
+          padding: EdgeInsets.all(16.0),
+          alignment: Alignment.centerLeft,
+          child: Text(
+            questions.toString() + ' questions (' + ((questions / 2)).toString() + ' minutes)',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        Container(
+            padding: EdgeInsets.all(8.0),
+            alignment: Alignment.centerRight,
+            child: RaisedButton(
+                child: Text('New Feedback'),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyQuestionarie(item)));
+                }))
+      ],
+    );
   }
 }

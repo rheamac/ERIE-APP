@@ -1,16 +1,16 @@
 import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'register-service.dart';
 import 'thank-you.dart';
+import 'package:location/location.dart';
 
 class QuestionWidget extends StatefulWidget {
   final Map<String, dynamic> feedback;
   final int questionIndex;
-  final Map<String, String> location = {'lat': '100', 'lng': '100'};
+  final LocationData location;
 
-  QuestionWidget(this.feedback, this.questionIndex);
+  QuestionWidget(this.feedback, this.questionIndex, this.location);
 
   _QuestionState createState() {
     return _QuestionState(this.feedback);
@@ -34,17 +34,33 @@ class _QuestionState extends State<QuestionWidget> {
     this.feedback = feedback;
   }
 
+  prev() {
+    print("Opening prev question");
+
+    if (this.widget.questionIndex != 1) {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => QuestionWidget(this.feedback,
+                  this.widget.questionIndex - 1, this.widget.location)));
+    }
+  }
+
   save() async {
     setState(() {
       loading = true;
     });
+
     RegisterService service = RegisterService();
     Map<String, dynamic> data = new Map();
 
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     data['user_id'] = user.uid.toString();
     data['question_id'] = this.question['id'].toString();
-    data['location'] = {'lat': '100', 'lng': '100'};
+    data['location'] = {
+      'lat': this.widget.location.latitude.toString(),
+      'lng': this.widget.location.longitude.toString()
+    };
     var answers = new List<Map<String, dynamic>>();
 
     var answerA = new Map<String, dynamic>();
@@ -67,16 +83,15 @@ class _QuestionState extends State<QuestionWidget> {
     print("Opening new question");
 
     if (this.feedback['questions'].length == this.widget.questionIndex + 1) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ThankYouWidget() ));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => ThankYouWidget()));
     } else {
       Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                QuestionWidget(this.feedback, this.widget.questionIndex + 1)));
+          context,
+          MaterialPageRoute(
+              builder: (context) => QuestionWidget(this.feedback,
+                  this.widget.questionIndex + 1, this.widget.location)));
     }
-
-    
   }
 
   @override
@@ -84,7 +99,7 @@ class _QuestionState extends State<QuestionWidget> {
     return MaterialApp(
         home: Scaffold(
             body: Container(
-                margin: EdgeInsets.all(64.0),
+                margin: EdgeInsets.symmetric(vertical: 64.0, horizontal: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,7 +133,9 @@ class _QuestionState extends State<QuestionWidget> {
         FlatButton(
           child: Row(
               children: <Widget>[Icon(Icons.arrow_back), Text(' Previous')]),
-          onPressed: () {},
+          onPressed: () {
+            prev();
+          },
         ),
         FlatButton(
           child: Row(
@@ -150,14 +167,32 @@ class _QuestionState extends State<QuestionWidget> {
   }
 
   Widget answerImages() {
-    String aEmotion = this.question['answer_a']['emotion'];
-    String bEmotion = this.question['answer_b']['emotion'];
+    String aEmotion =
+        this.question['answer_a']['emotion'].toString().toLowerCase();
+    String bEmotion =
+        this.question['answer_b']['emotion'].toString().toLowerCase();
+
+    Widget a;
+    Widget b;
+
+    try {
+      a = Image.asset('assets/memes/$aEmotion.jpg');
+    } catch (e) {
+      a = Image.network('https://placehold.it/400x400');
+      print('Emotion image $aEmotion not found');
+      print(e);
+    }
+    try {
+      b = Image.asset('assets/memes/$bEmotion.jpg');
+    } catch (e) {
+      b = Image.network('https://placehold.it/400x400');
+      print('Emotion image $bEmotion not found');
+      print(e);
+    }
 
     return Row(children: [
-      Expanded(
-          child: Image.asset('assets/memes/happy.png')),
-      Expanded(
-          child: Image.asset('assets/memes/sad.png')),
+      Expanded(child: a),
+      Expanded(child: b),
     ]);
   }
 }

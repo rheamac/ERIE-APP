@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 
 class RegisterService {
-  String hostname = "http://e9d0a8e9.ngrok.io";
+  String hostname = "http://erie.curos.in";
 
 
    Future<List> getData() async {

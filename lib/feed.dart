@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import './register-service.dart';
 import './question.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -65,12 +66,16 @@ class FeedbackList extends State {
       ),
       children: <Widget>[
         Container(
-            padding: EdgeInsets.all(16.0), child: Text(item['description'])),
+            padding: EdgeInsets.all(16.0),
+            child: Text(item['description'] ?? '')),
         Container(
           padding: EdgeInsets.all(16.0),
           alignment: Alignment.centerLeft,
           child: Text(
-            questions.toString() + ' questions (' + ((questions / 2)).toString() + ' minutes)',
+            questions.toString() +
+                ' questions (' +
+                ((questions / 2)).toString() +
+                ' minutes)',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
@@ -79,11 +84,21 @@ class FeedbackList extends State {
             alignment: Alignment.centerRight,
             child: RaisedButton(
                 child: Text('New Feedback'),
-                onPressed: () {
+                onPressed: () async {
+                  var locationD = new Location();
+                  LocationData currentLocation;
+
+                  try {
+                    currentLocation = await locationD.getLocation();
+                  } catch (e) {
+                    // currentLocation.longitude = 0;
+                  }
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => QuestionWidget(item, 0)));
+                          builder: (context) =>
+                              QuestionWidget(item, 0, currentLocation)));
                 }))
       ],
     );

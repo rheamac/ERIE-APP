@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import './register-model.dart';
 import './register-service.dart';
 import './feed.dart';
@@ -49,6 +50,7 @@ class Register extends State {
             child: ListView(
               children: <Widget>[
                 TextFormField(
+                    enabled: false,
                     initialValue: fname,
                     decoration: InputDecoration(
                         hintText: 'Enter First Name', labelText: 'First Name'),
@@ -56,6 +58,7 @@ class Register extends State {
                       _data.first_name = value;
                     }),
                 TextFormField(
+                    enabled: false,
                     initialValue: lname,
                     decoration: InputDecoration(
                         hintText: 'Enter Last Name', labelText: 'Last Name'),
@@ -63,6 +66,7 @@ class Register extends State {
                       _data.last_name = value;
                     }),
                 TextFormField(
+                    enabled: false,
                     keyboardType: TextInputType.emailAddress,
                     initialValue: userDetails1.email,
                     decoration: InputDecoration(
@@ -71,6 +75,14 @@ class Register extends State {
                       _data.email = value;
                     }),
                 TextFormField(
+
+                    // The validator receives the text the user has typed in
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter organization name';
+                      }
+                    },
+                    maxLength: 32,
                     decoration: InputDecoration(
                         hintText: 'Enter Organization Name',
                         labelText: 'Organization'),
@@ -78,21 +90,41 @@ class Register extends State {
                       _data.organization = value;
                     }),
                 TextFormField(
+                    validator: (value) {
+                      if (value.isEmpty) return 'Please enter Student Id';
+                    },
+                    inputFormatters: [
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                    maxLength: 10,
                     decoration: InputDecoration(
                         hintText: 'Enter Student id', labelText: 'Student Id'),
                     onSaved: (String value) {
                       _data.student_id = value;
                     }),
                 TextFormField(
+                    validator: (value) {
+                      if (value.isEmpty) return 'Please enter Contact number';
+                      if (!(value.length == 10))
+                        return 'Please enter 10 digit Contact number';
+                    },
+                    inputFormatters: [
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                    maxLength: 10,
                     decoration: InputDecoration(
-                        hintText: 'Enter Contact No.', labelText: 'Number'),
+                        hintText: 'Enter Contact No.',
+                        labelText: 'Contact Number'),
                     onSaved: (String value) {
                       _data.contact_no = value;
                     }),
                 TextFormField(
                     validator: (value) {
-                      if (value.isEmpty) return 'Please enter Code';
+                      if (value.isEmpty) return 'Please enter  Postal code';
+                      if (!(value.length == 6))
+                        return 'Please enter Six digit Postal code';
                     },
+                    maxLength: 6,
                     onSaved: (String value) {
                       _data.postal_code = value;
                     },
@@ -102,15 +134,17 @@ class Register extends State {
                 RaisedButton(
                     child: Text('Register'),
                     onPressed: () {
-                      print("onsubmit data");
-                      this._formKey.currentState.save();
-                      _data.id = id;
-                      this.mappedData = _data.toMap();
-                      _registerService.postData(this.mappedData);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyFeedbackList()));
+                      if (_formKey.currentState.validate()) {
+                        print("onsubmit data");
+                        this._formKey.currentState.save();
+                        _data.id = id;
+                        this.mappedData = _data.toMap();
+                        _registerService.postData(this.mappedData);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyFeedbackList()));
+                      }
                     })
               ],
             )),

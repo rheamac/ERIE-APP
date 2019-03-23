@@ -12,6 +12,13 @@ class RegisterService {
     List data = json.decode(res.body);
     return data;
   }
+   Future<bool> userExist(id) async {
+    String url = hostname + "/api/users/exists?id=$id";
+    http.Response res = await http.get(url); // get api call
+    Map data = json.decode(res.body);
+
+    return data['exists'];
+  }
 
   Future<Map> postData(Map datavalue) async {
     String url = hostname + "/api/users/register";

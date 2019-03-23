@@ -1,7 +1,9 @@
+import 'package:erie/register-service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import './erie-register.dart';
+import './feed.dart';
 
 void main() => runApp(MyApp());
 
@@ -81,15 +83,28 @@ class _MyHomePageState extends State<MyHomePage> {
               child: RaisedButton(
                 color: Colors.white,
                 child: Text(loading ? 'Loading...' : 'Sign in with Google'),
-                onPressed: loading
+                onPressed: 
+                loading
                     ? () {}
                     : () async {
+                      
                         FirebaseUser user = await _handleSignIn();
+                        RegisterService regService = new RegisterService();
+                        
+                        
+                        if(!await regService.userExist(user.uid)) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => MyRegister(user)),
                         );
+                        } else {
+                            Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyFeedbackList()),
+                        ); 
+                        }
                       },
               ),
             )

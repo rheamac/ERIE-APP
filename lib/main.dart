@@ -38,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       loading = true;
     });
+    if (await _googleSignIn.isSignedIn()) await _googleSignIn.signOut();
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
@@ -83,27 +84,30 @@ class _MyHomePageState extends State<MyHomePage> {
               child: RaisedButton(
                 color: Colors.white,
                 child: Text(loading ? 'Loading...' : 'Sign in with Google'),
-                onPressed: 
-                loading
+                onPressed: loading
                     ? () {}
                     : () async {
-                      
                         FirebaseUser user = await _handleSignIn();
+
+                        Map userDetails = {
+                          'displayName': user.displayName,
+                          'email': user.email,
+                          'uid': user.uid
+                        };
                         RegisterService regService = new RegisterService();
-                        
-                        
-                        if(!await regService.userExist(user.uid)) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyRegister(user)),
-                        );
+
+                        if (!await regService.userExist(user.uid)) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyRegister(userDetails)),
+                          );
                         } else {
-                            Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyFeedbackList()),
-                        ); 
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyFeedbackList()),
+                          );
                         }
                       },
               ),

@@ -6,7 +6,8 @@ import './register-service.dart';
 import './feed.dart';
 
 class MyRegister extends StatefulWidget {
-  final FirebaseUser userDetails;
+  Map userDetails;
+
   MyRegister(this.userDetails);
 
   Register createState() {
@@ -18,7 +19,7 @@ class Register extends State {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   RegisterModel _data = new RegisterModel();
   RegisterService _registerService = new RegisterService();
-  FirebaseUser userDetails1;
+  Map userDetails1;
   String fname;
   String lname;
   String id;
@@ -31,10 +32,10 @@ class Register extends State {
 
   Register(userDetails) {
     userDetails1 = userDetails;
-    List arr = userDetails1.displayName.split(" ");
+    List arr = userDetails['displayName'].split(" ");
     fname = arr[0];
     lname = arr[1];
-    id = userDetails1.uid;
+    id = userDetails['uid'];
   }
   @override
   Widget build(BuildContext context) {
@@ -68,14 +69,14 @@ class Register extends State {
                 TextFormField(
                     enabled: false,
                     keyboardType: TextInputType.emailAddress,
-                    initialValue: userDetails1.email,
+                    initialValue: userDetails1['email'],
                     decoration: InputDecoration(
                         hintText: 'Enter Email Address', labelText: 'Email'),
                     onSaved: (String value) {
                       _data.email = value;
                     }),
                 TextFormField(
-
+                    key: new Key('organization'),
                     // The validator receives the text the user has typed in
                     validator: (value) {
                       if (value.isEmpty) {
@@ -90,6 +91,7 @@ class Register extends State {
                       _data.organization = value;
                     }),
                 TextFormField(
+                   key: new Key('student_id'),
                     validator: (value) {
                       if (value.isEmpty) return 'Please enter Student Id';
                     },
@@ -103,6 +105,7 @@ class Register extends State {
                       _data.student_id = value;
                     }),
                 TextFormField(
+                  key: new Key('phone_no'),
                     validator: (value) {
                       if (value.isEmpty) return 'Please enter Contact number';
                       if (!(value.length == 10))
@@ -119,6 +122,7 @@ class Register extends State {
                       _data.contact_no = value;
                     }),
                 TextFormField(
+                   key: new Key('postal_code'),
                     validator: (value) {
                       if (value.isEmpty) return 'Please enter  Postal code';
                       if (!(value.length == 6))
